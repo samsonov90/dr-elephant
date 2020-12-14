@@ -354,6 +354,11 @@ public class AnalyticJob {
     result.totalDelay = hadoopAggregatedData.getTotalDelay();
     result.resourceWasted = hadoopAggregatedData.getResourceWasted();
 
+    result.username = jobTypeName.equalsIgnoreCase("hive") ?
+        Utils.truncateField(data.getConf().getProperty("mapreduce.job.acl-modify-job",
+            getUser()), AppResult.USERNAME_LIMIT, getAppId()) :
+        getUser() != null ? Utils.truncateField(getUser(), AppResult.USERNAME_LIMIT, getAppId()) : "";
+
     // Load App Heuristic information
     int jobScore = 0;
     result.yarnAppHeuristicResults = new ArrayList<AppHeuristicResult>();
